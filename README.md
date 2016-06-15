@@ -1,7 +1,7 @@
 reactors-http-request
 ===
 
-`reactors-http-request` negotiates HTTP(s) transactions for [reactors](https://github.com/co2-git/recactors).
+`reactors-http-request` negotiates HTTP(s) transactions for [reactors](https://github.com/co2-git/reactors).
 
 Most of the times you are fine using the `Fetch` API. It is supported both by React Native for Android and iOS and is a HTML spec - so it works both for web and desktop. Yet, for web and desktop, the fetch API won't handle requests to other domains. For these cases, you can use `reactors-http-request`.
 
