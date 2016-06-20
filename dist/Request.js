@@ -12,11 +12,17 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _Response2 = require('./Response');
+var _Response = require('./Response');
 
-var _Response3 = _interopRequireDefault(_Response2);
+var _Response2 = _interopRequireDefault(_Response);
+
+var _RequestAsAPromise2 = require('./Request/RequestAsAPromise');
+
+var _RequestAsAPromise3 = _interopRequireDefault(_RequestAsAPromise2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -24,24 +30,45 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global fetch */
 
-// import Reactors from 'reactors';
 
+var Request = function (_RequestAsAPromise) {
+  _inherits(Request, _RequestAsAPromise);
 
-var Request = function (_Response) {
-  _inherits(Request, _Response);
-
-  function Request() {
-    var _Object$getPrototypeO;
-
-    var _temp, _this, _ret;
+  function Request(path) {
+    var _this2 = this;
 
     _classCallCheck(this, Request);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Request).call(this));
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Request)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.method = 'GET', _this.content_type = 'application/json', _temp), _possibleConstructorReturn(_this, _ret);
+    _this.method = 'GET';
+    _this.content_type = 'application/json';
+
+
+    _this.path = path;
+
+    setTimeout(_asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              try {
+                _this.response = new _Response2.default(_this);
+                _this.response.on('error', function (error) {
+                  return _this.emit('error', error);
+                });
+              } catch (error) {
+                _this.emit('error', error);
+              }
+
+            case 1:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, _this2);
+    })));
+    return _this;
   }
 
   _createClass(Request, [{
@@ -75,6 +102,6 @@ var Request = function (_Response) {
   }]);
 
   return Request;
-}(_Response3.default);
+}(_RequestAsAPromise3.default);
 
 exports.default = Request;

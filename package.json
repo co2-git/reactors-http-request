@@ -23,7 +23,7 @@
   "dependencies": {
     "events": "^1.1.0",
     "lodash": "^4.13.1",
-    "reactors": "^0.1.1",
+    "reactors": "file:///Users/francois/Projects/RN/reactors",
     "superagent": "^2.0.0"
   }
 }

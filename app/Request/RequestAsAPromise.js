@@ -1,6 +1,6 @@
-import Events from './Events';
+import RequestAsAnEmitter from './RequestAsAnEmitter';
 
-export default class _Promise extends Events {
+export default class NewRequestAsAPromise extends RequestAsAnEmitter {
   then(callback: Function) {
     this.once('end', () => callback(this.response, this.error));
     return this;
