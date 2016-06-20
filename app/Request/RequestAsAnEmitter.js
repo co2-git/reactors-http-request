@@ -1,6 +1,6 @@
 import {EventEmitter} from 'events';
 
-export default class Events extends EventEmitter {
+export default class RequestAsAnEmitter extends EventEmitter {
   success(callback: Function) {
     this.once('success', () => callback(this.response));
     return this;

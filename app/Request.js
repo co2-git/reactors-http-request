@@ -1,8 +1,8 @@
 /* global fetch */
 import 'babel-polyfill';
 import _ from 'lodash';
-// import Reactors from 'reactors';
 import Response from './Response';
+import RequestAsAPromise from './Request/RequestAsAPromise';
 
 export
 type JSON_ACCEPTED_TYPES = ?string | ?number | ?boolean;
@@ -32,11 +32,33 @@ type MODULE = {
   delete: Function,
 };
 
-export default class Request extends Response {
+export default class Request extends RequestAsAPromise {
   method: METHOD = 'GET';
+
   payload: any;
+
   content_type: CONTENT_TYPE = 'application/json';
+
   error: ?Error;
+
+  response: Response;
+
+  headers: HEADERS;
+
+  constructor(path: string) {
+    super();
+
+    this.path = path;
+
+    setTimeout(async () => {
+      try {
+        this.response = new Response(this);
+        this.response.on('error', error => this.emit('error', error));
+      } catch (error) {
+        this.emit('error', error);
+      }
+    });
+  }
 
   post(payload: any): Request {
     this.method = 'POST';

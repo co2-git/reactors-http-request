@@ -1,82 +1,57 @@
 import superagent from 'superagent';
 import Reactors from 'reactors';
-import _Promise from './_Promise';
+import {EventEmitter} from 'events';
 
-export default class Response extends _Promise {
-  path: string;
-  response: any;
+type REQUEST = Object;
 
-  constructor(path: string) {
-    super(path);
+export default class Response extends EventEmitter {
+  request: REQUEST;
+  status: number;
+  message: string;
+  res: Object;
+  success: boolean;
+  accepted: boolean;
+  body: any;
+  charset: string;
 
-    this.path = path;
+  constructor(request: REQUEST) {
+    super();
 
-    setTimeout(this._fetch.bind(this));
+    setTimeout(async () => {
+      try {
+        const response = await this.fetch(request);
+        this.parse(response, request);
+      } catch (error) {
+        return this.error;
+      }
+    });
   }
 
-  async _fetch() {
-    try {
-      this.response = await this._fetchResponse();
-
-      if (this.response instanceof Error) {
-        throw this.response;
-      }
-
-      this.emit('end');
-      this.emit(this.response.status);
-      // this.emit(this.response.res.statusMessage);
-
-      if (this.response.info) {
-        this.emit('info');
-      } else if (this.response.success) {
-        this.emit('success');
-      } else if (this.response.clientError) {
-        this.emit('clientError');
-        this.emit('error', new Error(this.response.status +
-          ' ' + this.response.res.statusMessage)
-        );
-      } else if (this.response.serverError) {
-        this.emit('serverError');
-        this.emit('error', new Error(this.response.status +
-          ' ' + this.response.res.statusMessage)
-        );
-      }
-
-    } catch (error) {
-      this.error = error;
-      this.emit('error', error);
-    }
-  }
-
-  async _fetchResponse(): Promise {
+  async fetch(request): Promise {
+    console.log(Reactors.platform);
     try {
       const headers: HEADERS = {
-        'Content-Type': this.content_type,
+        'Content-Type': request.content_type,
       };
 
       const fetch_options: FETCH_OPTIONS = {
-        method: this.method,
+        method: request.method,
         headers,
       };
 
-      if (this.payload) {
-        fetch_options.body = JSON.stringify(this.payload);
+      if (request.payload) {
+        fetch_options.body = JSON.stringify(request.payload);
       }
 
       if (Reactors.platform === 'web') {
         return new Promise((resolve, reject) => {
           superagent
-            .get(this.path)
+            .get(request.path)
             .end((err, res) => {
               if (err) {
                 return reject(err);
               }
-              // console.log(res);
-              resolve({
-                ...res,
-                json: () => res.body,
-                success: res.status >= 200 && res.status <= 299,
-              });
+              resolve(res);
             });
         });
       }
@@ -84,6 +59,48 @@ export default class Response extends _Promise {
       return fetch(this.path, fetch_options);
     } catch (err) {
       return err;
+    }
+  }
+
+  async parse(response, request) {
+    try {
+      if (response instanceof Error) {
+        throw response;
+      }
+      Object.assign(this, response);
+
+      if (!this.json) {
+        this.json = () => this.body;
+      }
+
+      if (typeof this.success === 'undefined') {
+        this.success = this.status >= 200 && this.status <= 299;
+      }
+
+      this.message = response.statusText;
+
+      request.emit('end');
+      request.emit(this.status);
+      // this.emit(this.response.res.statusMessage);
+
+      if (this.info) {
+        request.emit('info');
+      } else if (this.success) {
+        request.emit('success');
+      } else if (this.clientError) {
+        request.emit('clientError');
+        request.emit('error', new Error(this.status +
+          ' ' + this.message)
+        );
+      } else if (this.serverError) {
+        request.emit('serverError');
+        request.emit('error', new Error(this.status +
+          ' ' + this.statusMessage)
+        );
+      }
+
+    } catch (error) {
+      request.emit('error', error);
     }
   }
 }
