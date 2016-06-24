@@ -1,6 +1,6 @@
 {
   "name": "reactors-http-request",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "reactors-http-request ===",
   "main": "dist/Request.js",
   "scripts": {
