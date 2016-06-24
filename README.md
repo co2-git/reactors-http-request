@@ -16,64 +16,23 @@ npm install --save reactors-http-request
 # Usage
 
 ```javascript
-
-// As a promise
-
-new Request(url)
-  .then(response => console.log(response.body))
-  .catch(response => console.log(response.status))
-  .finally(response => console.log('done'));
-
-// As a listener
-
-new Request(url)
-  .on('error', ::console.log)
-  .on(404, ::console.log)
-  .on(200, ::console.log)
-  .on('end', ::console.log);
-
-// Listener sugars
-new Request(url)
-  .error(error => {})
-  .success(response => {});
+request(url: string, options?: Object)
 ```
 
-# Events
+```javascript
+import request from 'reactors-http-request';
 
-List of events:
-
-- error
-- response, end
-- <status code>
-- <status message>
-- timeout
-- info
-- success
-- redirect
-- 'client error'
-- 'server error'
-- not found
-- forbidden
-
-# Events methods
-
-- error
-- end
-- success
-- ok
-- notFound
-- forbidden
-- clientError
-- serverError
+async function createNewFoo(url, foo) {
+  const res = await request(url, {post: foo});
+  const {ok, body, error} = res;
+  return ok ? body : error;
+}
+```
 
 # HTTP Methods
 
 ```javascript
-new Request(url).then(); // GET
-new Request(url).post({foo: true});
-new Request(url).put({foo: true});
-new Request(url).delete();
-new Request(url).head();
+request(url, {method: 'POST', payload: {foo: 1}});
 ```
 
 # Headers
@@ -81,23 +40,9 @@ new Request(url).head();
 You can set headers as such:
 
 ```javascript
-new Request(url).set({A: B, C: D});
+request(url, {headers: {['X-HEADER']: 'foo'}});
 ```
 
-# Content type
+# JSON detection
 
-`reactors-http-request` will try to auto-detect content type. For example, `new Request(url).post({foo: 1})` will be auto-detected as `application/json` - but you can specify type manually:
-
-```javascript
-new Request(url).type('text/plain');
-```
-
-We understand the following aliases:
-
-- **form** `application/x-www-form-urlencoded`
-- **gif** `image/gif`
-- **jpg** `image/jpeg`
-- **json** `application/json`
-- **multipart** `multipart/form-data`
-- **png** `image/png`
-- **text** `text/plain`
+JSON is detected for both requests (so you don't need to set the Content-Type header) and for responses (so you don't need to parse the text - it is already in JSON).
