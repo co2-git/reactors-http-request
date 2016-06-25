@@ -2,7 +2,7 @@
   "name": "reactors-http-request",
   "version": "0.0.2",
   "description": "reactors-http-request ===",
-  "main": "dist/index.js",
+  "main": "dist/request.js",
   "scripts": {
     "test": "node dist/test",
     "babel": "babel --out-dir dist/ app/",
