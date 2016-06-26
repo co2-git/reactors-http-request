@@ -26,7 +26,7 @@ function request(url) {
 
   return new Promise(function () {
     var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(resolve, reject) {
-      var res;
+      var res, content_type, type, output;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -45,7 +45,7 @@ function request(url) {
 
             case 6:
               res = _context.sent;
-              _context.next = 12;
+              _context.next = 28;
               break;
 
             case 9:
@@ -54,24 +54,58 @@ function request(url) {
 
             case 11:
               res = _context.sent;
+              content_type = 'unknown';
 
-            case 12:
-              resolve(res);
-              _context.next = 18;
+              if (res.headers.map['content-type']) {
+                content_type = res.headers.map['content-type'][0];
+              }
+              type = void 0;
+
+              if (/text\/html/.test(content_type)) {
+                type = 'html';
+              } else if (/text\/plain/.test(content_type)) {
+                type = 'text';
+              } else if (/application\/json/.test(content_type)) {
+                type = 'json';
+              }
+              output = void 0;
+              _context.t0 = type;
+              _context.next = _context.t0 === 'html' ? 20 : _context.t0 === 'text' ? 20 : _context.t0 === 'json' ? 24 : 20;
               break;
 
-            case 15:
-              _context.prev = 15;
-              _context.t0 = _context['catch'](1);
+            case 20:
+              _context.next = 22;
+              return res.text();
 
-              reject(_context.t0);
+            case 22:
+              res.body = _context.sent;
+              return _context.abrupt('break', 28);
 
-            case 18:
+            case 24:
+              _context.next = 26;
+              return res.json();
+
+            case 26:
+              res.body = _context.sent;
+              return _context.abrupt('break', 28);
+
+            case 28:
+              resolve(res);
+              _context.next = 34;
+              break;
+
+            case 31:
+              _context.prev = 31;
+              _context.t1 = _context['catch'](1);
+
+              reject(_context.t1);
+
+            case 34:
             case 'end':
               return _context.stop();
           }
         }
-      }, _callee, _this, [[1, 15]]);
+      }, _callee, _this, [[1, 31]]);
     }));
 
     return function (_x2, _x3) {
