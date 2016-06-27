@@ -31,28 +31,27 @@ function request(url) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              console.log('fetching', _reactors2.default.platform, url, options);
-              _context.prev = 1;
+              _context.prev = 0;
               res = void 0;
 
               if (!(_reactors2.default.platform === 'web' || _reactors2.default.platform === 'desktop')) {
-                _context.next = 9;
+                _context.next = 8;
                 break;
               }
 
-              _context.next = 6;
+              _context.next = 5;
               return _superagent(url, options);
 
-            case 6:
+            case 5:
               res = _context.sent;
-              _context.next = 28;
+              _context.next = 27;
               break;
 
-            case 9:
-              _context.next = 11;
+            case 8:
+              _context.next = 10;
               return fetch(url, options);
 
-            case 11:
+            case 10:
               res = _context.sent;
               content_type = 'unknown';
 
@@ -70,42 +69,42 @@ function request(url) {
               }
               output = void 0;
               _context.t0 = type;
-              _context.next = _context.t0 === 'html' ? 20 : _context.t0 === 'text' ? 20 : _context.t0 === 'json' ? 24 : 20;
+              _context.next = _context.t0 === 'html' ? 19 : _context.t0 === 'text' ? 19 : _context.t0 === 'json' ? 23 : 19;
               break;
 
-            case 20:
-              _context.next = 22;
+            case 19:
+              _context.next = 21;
               return res.text();
 
-            case 22:
+            case 21:
               res.body = _context.sent;
-              return _context.abrupt('break', 28);
+              return _context.abrupt('break', 27);
 
-            case 24:
-              _context.next = 26;
+            case 23:
+              _context.next = 25;
               return res.json();
 
-            case 26:
+            case 25:
               res.body = _context.sent;
-              return _context.abrupt('break', 28);
+              return _context.abrupt('break', 27);
 
-            case 28:
+            case 27:
               resolve(res);
-              _context.next = 34;
+              _context.next = 33;
               break;
 
-            case 31:
-              _context.prev = 31;
-              _context.t1 = _context['catch'](1);
+            case 30:
+              _context.prev = 30;
+              _context.t1 = _context['catch'](0);
 
               reject(_context.t1);
 
-            case 34:
+            case 33:
             case 'end':
               return _context.stop();
           }
         }
-      }, _callee, _this, [[1, 31]]);
+      }, _callee, _this, [[0, 30]]);
     }));
 
     return function (_x2, _x3) {
