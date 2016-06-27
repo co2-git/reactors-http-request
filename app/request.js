@@ -4,7 +4,6 @@ import Reactors from 'reactors';
 
 export default function request(url, options = {}) {
   return new Promise(async (resolve, reject) => {
-    console.log('fetching', Reactors.platform, url, options);
     try {
       let res;
       if (Reactors.platform === 'web' || Reactors.platform === 'desktop') {
