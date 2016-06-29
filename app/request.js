@@ -43,13 +43,28 @@ export default function request(url, options = {}) {
 
 function _superagent(url, options) {
   return new Promise((resolve, reject) => {
-    superagent
-      .get(url)
-      .end((err, res) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(res);
-      });
+    let req;
+    switch (options.method) {
+    case 'POST':
+      req = superagent.post(url).send(options.payload);
+      break;
+    case 'PUT':
+      req = superagent.put(url).send(options.payload);
+      break;
+    case 'DELETE':
+      req = superagent.delete(url);
+      break;
+    case 'HEAD':
+      req = superagent.head(url);
+      break;
+    default:
+      req = superagent.get(url);
+    }
+    req.end((err, res) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(res);
+    });
   });
 }

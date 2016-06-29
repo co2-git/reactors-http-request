@@ -115,7 +115,24 @@ function request(url) {
 
 function _superagent(url, options) {
   return new Promise(function (resolve, reject) {
-    _superagent3.default.get(url).end(function (err, res) {
+    var req = void 0;
+    switch (options.method) {
+      case 'POST':
+        req = _superagent3.default.post(url).send(options.payload);
+        break;
+      case 'PUT':
+        req = _superagent3.default.put(url).send(options.payload);
+        break;
+      case 'DELETE':
+        req = _superagent3.default.delete(url);
+        break;
+      case 'HEAD':
+        req = _superagent3.default.head(url);
+        break;
+      default:
+        req = _superagent3.default.get(url);
+    }
+    req.end(function (err, res) {
       if (err) {
         return reject(err);
       }
