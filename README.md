@@ -23,7 +23,7 @@ request(url: string, options?: Object)
 import request from 'reactors-http-request';
 
 async function createNewFoo(url, foo) {
-  const res = await request(url, {post: foo});
+  const res = await request(url, {method: 'POST', payload: foo});
   const {ok, body, error} = res;
   return ok ? body : error;
 }
